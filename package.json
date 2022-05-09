@@ -4,7 +4,7 @@
   "description": "Projeto Final para a cadeira de Criatividade Computacional",
   "main": "index.html",
   "scripts": {
-    "start": "parcel index.html --open",
+    "start": "./node_modules/parcel-bundler/bin/cli.js index.html",
     "build": "parcel build index.html",
     "heroku-postbuild": "parcel build index.html"
   },
