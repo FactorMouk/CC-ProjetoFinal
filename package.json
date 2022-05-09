@@ -4,8 +4,8 @@
   "description": "Projeto Final para a cadeira de Criatividade Computacional",
   "main": "index.html",
   "scripts": {
-    "start": "./node_modules/parcel-bundler/bin/cli.js index.html",
-    "build": "parcel build index.html",
+    "start": "node --max_old_space_size=2560 ./node_modules/parcel-bundler/bin/cli.js index.html",
+    "build": "node --max_old_space_size=2560 parcel build index.html",
     "heroku-postbuild": "parcel build index.html"
   },
   "repository": {
