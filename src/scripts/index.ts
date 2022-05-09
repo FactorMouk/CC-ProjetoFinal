@@ -4,14 +4,6 @@ import P5 from 'p5';
 // const sketch = (p5: P5) => {
 //   let image;
 
-//   p5.preload = () => {
-//     image = p5.loadImage(
-//       'src/assets/image.png',
-//       () => console.log('carregou'),
-//       (error) => console.log(error),
-//     );
-//   };
-
 //   p5.setup = () => {
 //     const canvas = p5.createCanvas(768, 768);
 //     canvas.parent('canvas-container');
@@ -100,7 +92,7 @@ import P5 from 'p5';
 // });
 
 const points = [];
-let count = 0;
+const count = 0;
 
 let r;
 let g;
@@ -109,37 +101,12 @@ let b;
 let alpha;
 
 let image;
+let canvas;
+let input;
 
 const sketch = (p5: P5) => {
-  p5.preload = () => {
-    image = p5.loadImage(
-      'src/assets/image.png',
-      () => console.log('carregou'),
-      (error) => console.log(error),
-    );
-  };
   p5.setup = () => {
-    const canvas = p5.createCanvas(image.width, image.height);
-    canvas.parent('canvas-container');
-    p5.background(255);
-    p5.angleMode(p5.DEGREES);
-    p5.noiseDetail(1, 1);
-
-    const density = 80;
-    const space = p5.width / density;
-
-    for (let i = 0; i < p5.width; i += space) {
-      for (let j = 0; j < p5.height; j += space) {
-        const p = p5.createVector(
-          i + p5.random(-10, 10),
-          j + p5.random(-10, 10),
-        );
-        points.push(p);
-      }
-    }
-  };
-  p5.draw = () => {
-    function linhazinha() {
+    function lines() {
       for (let x = 0; x < points.length; x++) {
         r = p5.map(Math.abs(points[x].x - p5.width / 2), 0, 720, 255, 0);
         g = 100; //map(points[x].x, 0, width, 0, 255)
@@ -182,12 +149,49 @@ const sketch = (p5: P5) => {
         p5.ellipse(points[x].x, points[x].y, image.width / 1000);
       }
     }
-    p5.noStroke();
-    if (count < 100) {
-      linhazinha();
-      count++;
+
+    function createCanvas() {
+      canvas = p5.createCanvas(image.width, image.height);
+      canvas.parent('canvas-container');
+      p5.background(255);
+      p5.angleMode(p5.DEGREES);
+      p5.noiseDetail(1, 1);
+
+      const density = 80;
+      const space = p5.width / density;
+
+      for (let i = 0; i < p5.width; i += space) {
+        for (let j = 0; j < p5.height; j += space) {
+          const p = p5.createVector(
+            i + p5.random(-10, 10),
+            j + p5.random(-10, 10),
+          );
+          points.push(p);
+        }
+      }
+
+      p5.noStroke();
+
+      for (let i = 0; i < 100; i++) {
+        lines();
+      }
     }
+
+    function handleFile(file) {
+      if (file.type === 'image') {
+        image = p5.loadImage(file.data, () => {
+          createCanvas();
+        });
+      } else {
+        image = null;
+      }
+    }
+
+    input = p5.createFileInput(handleFile);
+    input.position(0, 0);
   };
+
+  p5.draw = () => {};
 };
 
 document.addEventListener('DOMContentLoaded', () => {
